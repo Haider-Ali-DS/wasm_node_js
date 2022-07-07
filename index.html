@@ -1,25 +1,30 @@
+nes (22 sloc) 475 Bytes
+
+<!doctype html>
+
 <html>
-  <head>
-    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+
+<head>
+    <meta charset="utf-8">
+    <title>WASM instantiateStreaming() test</title>
+</head>
+
+<body>
     <script>
-      if (!('WebAssembly' in window)) {
-        alert('you need a browser with wasm support enabled :(');
-      }
-      (async () => {
-      const response = await fetch('index.wasm');
-      const buffer = await response.arrayBuffer();
-      const module = await WebAssembly.compile(buffer);
-      const instance = await WebAssembly.instantiate(module);
-      const exports = instance.exports;
-      console.log(exports);
-      })();    
-      
+        const importObject = {
+            imports: {
+                imported_func: arg => {
+                    console.log(arg);
+                }
+            }
+        };
+
+        WebAssembly.instantiateStreaming(fetch("index.wasm"), importObject)
+            .then(obj => {
+                console.log("hello world");
+                obj.instance.exports.exported_func();
+            });
     </script>
-  </head>
-  <body>
-  </body>
-  <script
-    src="https://cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.js"
-    integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
-    crossorigin="anonymous"></script>
+</body>
+
 </html>

@@ -1,0 +1,42 @@
+<html>
+
+<head>
+  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+  <script>
+    if (!('WebAssembly' in window)) {
+      alert('you need a browser with wasm support enabled :(');
+    }
+    (async () => {
+      const importObject = {
+        'env': {
+          'memoryBase': 0,
+          'tableBase': 0,
+          'memory': new WebAssembly.Memory({'initial': 8}),
+          'abort': alert
+        }
+      };
+      
+      fetch('index.wasm')
+      .then(response => response.arrayBuffer())
+      .then(data => WebAssembly.instantiate(new Uint8Array(data), importObject))
+      .then(module => {
+        console.log(module.instance.exports);
+      })
+      // const response = await fetch('index.wasm');
+      // const buffer = await response.arrayBuffer();
+      // const module = await WebAssembly.compile(buffer);
+      // const instance = await WebAssembly.instantiate(module, importObject);
+      // const exports = instance.exports;
+      // console.log(exports);
+    })();
+
+  </script>
+</head>
+
+<body>
+</body>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+
+</html>
